@@ -1,7 +1,7 @@
 import type {ForwardedRef} from 'react';
 import React, {useContext} from 'react';
 // eslint-disable-next-line no-restricted-imports
-import {Text as RNText, StyleSheet} from 'react-native';
+import {Platform, Text as RNText, StyleSheet} from 'react-native';
 import type {TextProps as RNTextProps, TextStyle} from 'react-native';
 import useTheme from '@hooks/useTheme';
 import type {FontUtilsType} from '@styles/utils/FontUtils';
@@ -28,6 +28,8 @@ type TextProps = RNTextProps &
         family?: keyof FontUtilsType['fontFamily']['platform'];
     };
 
+const convertPxToRem = (px: number) => `${px/16}rem`;
+
 function Text({color, fontSize = variables.fontSizeNormal, textAlign = 'left', children, family = 'EXP_NEUE', style = {}, ...props}: TextProps, ref: ForwardedRef<RNText>) {
     const theme = useTheme();
     const customStyle = useContext(CustomStylesForChildrenContext);
@@ -40,6 +42,10 @@ function Text({color, fontSize = variables.fontSizeNormal, textAlign = 'left', c
         ...StyleSheet.flatten(style),
         ...StyleSheet.flatten(customStyle),
     };
+
+    if (Platform.OS === 'web') {
+        componentStyle.fontSize = convertPxToRem(fontSize) as any;
+    }
 
     if (!componentStyle.lineHeight && componentStyle.fontSize === variables.fontSizeNormal) {
         componentStyle.lineHeight = variables.fontSizeNormalHeight;
