@@ -53,7 +53,7 @@ function Text({color, fontSize = variables.fontSizeNormal, textAlign = 'left', c
 
     return (
         <RNText
-            allowFontScaling={false}
+            allowFontScaling={true}
             ref={ref}
             style={componentStyle}
             // eslint-disable-next-line react/jsx-props-no-spreading
